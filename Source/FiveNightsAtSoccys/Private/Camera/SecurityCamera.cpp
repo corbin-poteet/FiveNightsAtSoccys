@@ -48,6 +48,7 @@ void ASecurityCamera::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+// Called by AComputer::LinkToComeras
 bool ASecurityCamera::LinkToComputer(const AComputer* Computer)
 {	
 	const int Width = Computer->GetScreenResolution().X;

@@ -6,7 +6,6 @@
 #include "Selection.h"
 #include "Components/ArrowComponent.h"
 
-FName AAnimatronicPose::MeshComponentName(TEXT("AnimatronicMesh"));
 
 // Sets default values
 AAnimatronicPose::AAnimatronicPose()
@@ -16,11 +15,11 @@ AAnimatronicPose::AAnimatronicPose()
 
 	//bRunConstructionScriptOnDrag = false;
 
-	Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(AAnimatronicPose::MeshComponentName);
+	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>("AnimatronicMesh");
 
 	#if WITH_EDITORONLY_DATA
 		//USelection::SelectObjectEvent.AddUObject(this, &AAnimatronicPose::OnSelectedDelegate);
-		USelection::SelectObjectEvent.AddUObject(this, &ThisClass::OnObjectSelected);
+		USelection::SelectObjectEvent.AddUObject(this, &ThisClass::OnSelected);
 	#endif
 }
 
@@ -28,7 +27,7 @@ void AAnimatronicPose::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	//ActivateAnimatronic(false);
+	ActivateAnimatronic(false);
 }
 
 void AAnimatronicPose::ActivateAnimatronic(bool bNewActivated)
@@ -44,17 +43,10 @@ void AAnimatronicPose::BeginPlay()
 	
 }
 
-// Called every frame
-void AAnimatronicPose::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-
 AAnimatronicPose* AAnimatronicPose::SelectNextPose()
 {
 	// If there are no poses, return self
-	if(NextPoseCandidates.Num() < 0)
+	if(NextPoseCandidates.Num() <= 0)
 	{
 		return this;
 	}
@@ -81,17 +73,39 @@ void AAnimatronicPose::OnConstruction(const FTransform& Transform)
 
 	if(IsSelectedInEditor())
 	{
-		ShowDebugLinks(true);
+		ShowDebugLinks();
 	}
 }
 
-void AAnimatronicPose::ShowDebugLinks(bool bShowDebug)
+
+
+#if WITH_EDITORONLY_DATA
+// ReSharper disable once CppParameterMayBeConstPtrOrRef
+// ReSharper disable once CppMemberFunctionMayBeConst
+void AAnimatronicPose::OnSelected(UObject* Object)
 {
-	if(!bShowDebug)
+	if (!GetWorld())
 	{
 		return;
 	}
 	
+	if (!Object || !Object->IsA<AAnimatronicPose>())
+	{
+		FlushPersistentDebugLines(GetWorld());
+		return;
+	}
+
+	if(Object == this)
+	{
+		ShowDebugLinks();
+	}
+
+	ShowDebugLinks();
+
+}
+
+void AAnimatronicPose::ShowDebugLinks() const
+{	
 	FlushPersistentDebugLines(GetWorld());
 	UE_LOG(LogTemp, Warning, TEXT("Selected"));
 	for (const AAnimatronicPose* Pose : GetNextPoseCandidates())
@@ -115,24 +129,6 @@ void AAnimatronicPose::ShowDebugLinks(bool bShowDebug)
 		//DrawDebugDirectionalArrow(GetWorld(), Start, End, 250.0f, Color, true, 1.0f, 1, 5.0f);
 		
 	}
-}
-
-#if WITH_EDITORONLY_DATA
-void AAnimatronicPose::OnObjectSelected(UObject* Object)
-{
-	if (!GetWorld())
-	{
-		return;
-	}
-	
-	if (!Object || !Object->IsA<AAnimatronicPose>())
-	{
-		FlushPersistentDebugLines(GetWorld());
-		return;
-	}
-
-	ShowDebugLinks(Object == this);
-
 }
 #endif
 

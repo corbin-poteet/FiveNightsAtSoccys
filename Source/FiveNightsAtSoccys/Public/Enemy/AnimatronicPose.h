@@ -11,30 +11,56 @@
 UCLASS()
 class FIVENIGHTSATSOCCYS_API AAnimatronicPose : public AActor
 {
-
 private:
 	GENERATED_BODY()
 
-	/** The main skeletal mesh associated with this Character (optional sub-object). */
+	// The main skeletal mesh associated with this animatronic (optional sub-object).
 	UPROPERTY(Category=Character, VisibleDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<USkeletalMeshComponent> Mesh;
-	
+
 public:
-	/** Name of the MeshComponent. Use this name if you want to prevent creation of the component (with ObjectInitializer.DoNotCreateDefaultSubobject). */
-	static FName MeshComponentName;
-	
-	
-	void OnObjectSelected(UObject* Object);
-	
-	
 	// Sets default values for this actor's properties
 	AAnimatronicPose();
 
-	
-
-	
+	//~AActor interface
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void PostInitializeComponents() override;
+	virtual void BeginPlay() override;
+	//~End of AActor interface
 
+	/**
+	 * @brief Activates and deactivates the animatronic.
+	 * @param bNewActivated true if the animatronic should be activated.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Animatronic")
+	void ActivateAnimatronic(bool bNewActivated);
+
+
+private:
+	// True if the animatronic is activated. If false, the animatronic will not move.
+	UPROPERTY(BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
+	bool bAnimatronicActivated = false;
+
+	// True if this pose kills the player.
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	bool bKillPose = false;
+
+	// True if this is the first pose in the animatronic's sequence.
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	bool bStartingPose = false;
+
+public:
+	/**
+	 * @return the next animatronic pose to activate. Self if no pose is found.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Animatronic")
+	AAnimatronicPose* SelectNextPose();
+
+	// The animatronic tag that this pose is associated with.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	FGameplayTag AnimatronicTag;
+
+public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
 	bool IsActivated() const { return bAnimatronicActivated; }
 
@@ -42,71 +68,46 @@ public:
 	bool IsKillPose() const { return bKillPose; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
-	bool IsBlocked() const { return bBlocked;}
+	bool IsBlocked() const { return bBlocked; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
-	bool IsStartingPose() const	{ return bStartingPose; }
+	bool IsStartingPose() const { return bStartingPose; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
 	USkeletalMeshComponent* GetMesh() const { return Mesh; }
 
-
-	UFUNCTION(BlueprintCallable, Category = "Animatronic")
-	void ActivateAnimatronic(bool bNewActivated);
-
 	UFUNCTION(BlueprintCallable, Category = "Animatronic")
 	void SetBlocked(bool bNewBlocked) { bBlocked = bNewBlocked; }
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Animatronic")
 	TArray<AAnimatronicPose*> GetNextPoseCandidates() const { return NextPoseCandidates; }
 
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
-	bool bAnimatronicActivated = false;
-
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
-	bool bKillPose = false;
-
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
-	bool bStartingPose = false;
-	
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION(BlueprintCallable, Category = "Animatronic")
-	AAnimatronicPose* SelectNextPose();
-	virtual void OnConstruction(const FTransform& Transform) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
-	FGameplayTag AnimatronicTag;
-
-	void ShowDebugLinks(bool bShowDebug);
-	
 private:
-
-	bool bShowDebugLinks = false;
-	
+	// The next poses that can be selected after this pose.
 	UPROPERTY(EditInstanceOnly, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
 	TArray<AAnimatronicPose*> NextPoseCandidates;
 
-	UPROPERTY(EditInstanceOnly, Category = "Animatronic|Cameras", meta = (AllowPrivateAccess = "true"))
+	// The cameras that can see this pose.
+	UPROPERTY(EditInstanceOnly, Category = "Config", meta = (AllowPrivateAccess = "true"))
 	TArray<ASecurityCamera*> WatchingCameras;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
-	AAnimatronicPose* PreviousPose;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
+	// Whether this pose is can be activated.
+	UPROPERTY(BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
 	bool bBlocked;
 
-	UPROPERTY(EditInstanceOnly, Category = "Animatronic|Debug", meta = (AllowPrivateAccess = "true"))
-	bool bDebugPoseCandidates = false;
 
-	UPROPERTY(EditInstanceOnly, Category = "Animatronic|Debug", meta = (AllowPrivateAccess = "true"))
-	bool bDebugWatchingCameras = false;
-	
+#if WITH_EDITORONLY_DATA
+public:
+	/**
+	 * @brief Called whenever an object is selected in the editor viewport.
+	 * @param Object the currently selected object
+	 */
+	void OnSelected(UObject* Object);
+private:
+	/**
+	 * @brief Draws debug lines to each of the next pose candidates.
+	 */
+	void ShowDebugLinks() const;
+#endif
 };

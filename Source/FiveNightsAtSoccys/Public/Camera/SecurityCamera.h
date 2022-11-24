@@ -19,6 +19,7 @@ public:
 	// Sets default values for this actor's properties
 	ASecurityCamera();
 
+	
 	void SetFrameRate(float NewFrameRate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Camera")

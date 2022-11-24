@@ -26,15 +26,13 @@ void AComputer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Connect to security cameras
 	LinkToCameras();
+
+	// Switch to camera 0
 	SwitchToCameraIndex(CurrentCameraIndex);
 }
 
-// Called every frame
-void AComputer::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 
 bool AComputer::LinkToCameras()
 {
