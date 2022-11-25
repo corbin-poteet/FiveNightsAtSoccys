@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Computer.generated.h"
 
+// dynamic multiclass delegate
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCameraChangedSignature);
+
 UCLASS()
 class FIVENIGHTSATSOCCYS_API AComputer : public AActor
 {
@@ -13,10 +16,13 @@ class FIVENIGHTSATSOCCYS_API AComputer : public AActor
 
 	// The mesh for the computer monitor
 	UPROPERTY(Category=Computer, VisibleDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	UStaticMeshComponent* MonitorMesh;
+	UStaticMeshComponent* MonitorMesh;	
 
 public:
 	AComputer();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCameraChangedSignature OnCameraChangedDelegate;
 
 protected:
 	//~AActor interface
