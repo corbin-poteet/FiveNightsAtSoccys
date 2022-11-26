@@ -30,6 +30,10 @@
 				"Mac",
 				"Linux"
 			]
+		},		
+		{
+			"Name": "GameplayMessageRouter",
+			"Enabled": true
 		}
 	]
 }

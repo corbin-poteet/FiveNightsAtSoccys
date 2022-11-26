@@ -22,7 +22,7 @@ public:
 	AComputer();
 
 	UPROPERTY(BlueprintAssignable)
-	FOnCameraChangedSignature OnCameraChangedDelegate;
+	FOnCameraChangedSignature OnCameraChanged;
 
 protected:
 	//~AActor interface

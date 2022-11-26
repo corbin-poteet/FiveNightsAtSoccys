@@ -79,7 +79,7 @@ void AComputer::SwitchToCameraIndex(int32 Index)
 			CurrentCameraIndex = Index;
 			UE_LOG(LogTemp, Warning, TEXT("Switching to index %d, camera %s"), CurrentCameraIndex, *Camera->GetName());
 			ScreenMaterial->SetTextureParameterValue("Display Input", Camera->GetCameraOutput());
-			OnCameraChangedDelegate.Broadcast();
+			OnCameraChanged.Broadcast();
 		}
 		else
 		{
