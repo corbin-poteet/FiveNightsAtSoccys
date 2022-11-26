@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TaggedActor.h"
 #include "GameFramework/Actor.h"
 #include "Computer.generated.h"
 
@@ -10,7 +11,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCameraChangedSignature);
 
 UCLASS()
-class FIVENIGHTSATSOCCYS_API AComputer : public AActor
+class FIVENIGHTSATSOCCYS_API AComputer : public ATaggedActor
 {
 	GENERATED_BODY()
 

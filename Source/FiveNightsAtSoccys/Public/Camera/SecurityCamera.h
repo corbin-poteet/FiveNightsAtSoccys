@@ -3,13 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagAssetInterface.h"
+#include "TaggedActor.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "GameFramework/Actor.h"
 #include "SecurityCamera.generated.h"
 
 UCLASS()
-class FIVENIGHTSATSOCCYS_API ASecurityCamera : public AActor
+class FIVENIGHTSATSOCCYS_API ASecurityCamera : public ATaggedActor
 {
+private:
 	GENERATED_BODY()
 
 	UPROPERTY(Category=Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
