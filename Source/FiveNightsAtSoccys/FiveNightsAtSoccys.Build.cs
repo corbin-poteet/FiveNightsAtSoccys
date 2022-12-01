@@ -8,7 +8,7 @@ public class FiveNightsAtSoccys : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTags", "EditorFramework", "UnrealEd" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTags", "EditorFramework", "UnrealEd", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "GameplayMessageRuntime" });
 
