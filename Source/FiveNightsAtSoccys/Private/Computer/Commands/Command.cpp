@@ -2,3 +2,10 @@
 
 
 #include "Computer/Commands/Command.h"
+
+void UCommand::InitializeCommand(ATerminalComputer* InComputer, UUserWidget* InTerminalWidget)
+{
+	// Set the computer and terminal widget
+	Computer = InComputer;
+	TerminalWidget = InTerminalWidget;
+}
