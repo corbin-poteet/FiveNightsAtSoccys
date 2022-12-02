@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "TaggedActor.h"
+#include "Camera/SecurityCamera.h"
 #include "GameFramework/Actor.h"
 #include "Computer.generated.h"
 
@@ -51,6 +52,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Computer|Camera")
 	void SwitchToPreviousCamera();
 
+	UFUNCTION(BlueprintCallable, Category = "Computer|Camera")
+	ASecurityCamera* GetCurrentCamera() const { return CurrentCamera; }
+	
 private:
 	/**
 	 * @brief Connects to all security cameras in the level. Called on BeginPlay.
@@ -59,6 +63,9 @@ private:
 	UFUNCTION(BlueprintCallable, Category = "Computer", meta = (AllowPrivateAccess = "true"))
 	bool LinkToCameras();
 
+	void LoadStreamLevelsBySoftObjectPtr();
+	
+	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Computer|Info")
 	FVector2D GetScreenResolution() const { return ScreenResolution; }
@@ -83,5 +90,11 @@ private:
 	int32 CurrentCameraIndex = 0;
 
 	UPROPERTY(BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
+	ASecurityCamera* CurrentCamera;
+
+	UPROPERTY(BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
 	UMaterialInstanceDynamic* ScreenMaterial;
+
+	TArray<TSoftObjectPtr<UWorld>> StreamLevelsStack;
+	bool bIsStreamingLevel = false;
 };

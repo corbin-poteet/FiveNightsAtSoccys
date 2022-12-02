@@ -55,6 +55,18 @@ bool AComputer::LinkToCameras()
 	return NumCameras != SecurityCameras.Num();
 }
 
+void AComputer::LoadStreamLevelsBySoftObjectPtr()
+{
+	StreamLevelsStack.RemoveAt(0);
+	if(StreamLevelsStack.IsEmpty()) return;
+	
+	FLatentActionInfo LatentInfo;
+	LatentInfo.CallbackTarget = this;
+	LatentInfo.ExecutionFunction = "LoadStreamLevelsBySoftObjectPtr";
+	
+	UGameplayStatics::LoadStreamLevelBySoftObjectPtr(GetWorld(), StreamLevelsStack[0], true, true, LatentInfo);
+}
+
 void AComputer::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
@@ -72,13 +84,18 @@ void AComputer::SwitchToCameraIndex(int32 Index)
 		return;
 	}
 	
-	if(const ASecurityCamera* Camera = SecurityCameras[CurrentCameraIndex])
+	if(ASecurityCamera* Camera = SecurityCameras[Index])
 	{
 		if(ScreenMaterial)
 		{
+			// Change camera index
 			CurrentCameraIndex = Index;
-			UE_LOG(LogTemp, Warning, TEXT("Switching to index %d, camera %s"), CurrentCameraIndex, *Camera->GetName());
+			CurrentCamera = Camera;
+
+			// Set screen material texture to camera view
 			ScreenMaterial->SetTextureParameterValue("Display Input", Camera->GetCameraOutput());
+
+			
 			OnCameraChanged.Broadcast();
 		}
 		else

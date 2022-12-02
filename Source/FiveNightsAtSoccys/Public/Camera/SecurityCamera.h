@@ -27,6 +27,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Camera")
 	UTextureRenderTarget2D* GetCameraOutput() const { return SceneCaptureComponent->TextureTarget; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Camera")
+	TArray<TSoftObjectPtr<UWorld>>& GetVisibleLevels() { return VisibleLevels; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Camera")
+	TArray<FName>& GetVisibleLevelNames() { return VisibleLevelNames; }
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,6 +54,11 @@ private:
 	UFUNCTION()
 	void UpdateCamera() const;
 
-	//UPROPERTY(EditAnywhere, Category = "Config", meta = (AllowPrivateAccess = "true"))
-	//UTextureRenderTarget2D* TextureRenderTarget = nullptr;
+	// Levels that are visible from this camera's view
+	UPROPERTY(EditAnywhere, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	TArray<TSoftObjectPtr<UWorld>> VisibleLevels;
+
+	UPROPERTY(EditAnywhere, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	TArray<FName> VisibleLevelNames;
+	
 };
