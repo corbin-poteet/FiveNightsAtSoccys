@@ -23,4 +23,9 @@ bool ATaggedActor::CanEditChange(const FProperty* InProperty) const
 
 	return Super::CanEditChange(InProperty);
 }
+
+void ATaggedActor::K2_GetOwnedGameplayTags_Implementation(FGameplayTagContainer& TagContainer) const
+{
+	GetOwnedGameplayTags(TagContainer);
+}
 #endif

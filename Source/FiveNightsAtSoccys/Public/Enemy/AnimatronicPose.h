@@ -9,8 +9,10 @@
 #include "AnimatronicPose.generated.h"
 
 UCLASS()
-class FIVENIGHTSATSOCCYS_API AAnimatronicPose : public AActor
+class FIVENIGHTSATSOCCYS_API AAnimatronicPose : public ATaggedActor
 {
+public:
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 private:
 	GENERATED_BODY()
 
@@ -67,8 +69,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
 	bool IsKillPose() const { return bKillPose; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
-	bool IsBlocked() const { return bBlocked; }
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, BlueprintPure, Category = "Animatronic")
+	bool IsBlocked();
+	
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Animatronic")
 	bool IsStartingPose() const { return bStartingPose; }

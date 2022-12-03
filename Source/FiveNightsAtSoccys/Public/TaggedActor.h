@@ -23,6 +23,9 @@ public:
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 	//~End of IGameplayTagAssetInterface
 
+
+
+	
 	//~UObject interface
 	#if WITH_EDITOR
 	virtual bool CanEditChange(const FProperty* InProperty) const override;
@@ -30,6 +33,10 @@ public:
 	//~End of UObject interface
 
 	protected:
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, BlueprintPure, Category = "GameplayTags", meta = (DisplayName = "Get Gameplay Tags"))
+	void K2_GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const;
+	
 	// Gameplay-related tags associated with this actor
 	UPROPERTY(EditAnywhere, Category=Actor)
 	FGameplayTagContainer StaticGameplayTags;

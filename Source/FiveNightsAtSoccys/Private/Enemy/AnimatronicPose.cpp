@@ -7,6 +7,12 @@
 #include "Components/ArrowComponent.h"
 
 
+void AAnimatronicPose::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	Super::GetOwnedGameplayTags(TagContainer);
+
+}
+
 // Sets default values
 AAnimatronicPose::AAnimatronicPose()
 {
@@ -46,10 +52,10 @@ void AAnimatronicPose::BeginPlay()
 AAnimatronicPose* AAnimatronicPose::SelectNextPose()
 {
 	// If there are no poses, return self
-	if(NextPoseCandidates.Num() <= 0)
-	{
-		return this;
-	}
+	//if(NextPoseCandidates.Num() <= 0)
+	//{
+	//	return this;
+	//}
 	
 	// If we can kill the player, do so
 	for (const auto& Pose : NextPoseCandidates)
@@ -63,8 +69,23 @@ AAnimatronicPose* AAnimatronicPose::SelectNextPose()
 		}
 	}
 
-	// Otherwise, select a random pose
-	return NextPoseCandidates[FMath::RandRange(0, NextPoseCandidates.Num() - 1)];
+	const int32 NumShuffles = NextPoseCandidates.Num() - 1;
+	for(int32 i = 0 ; i < NumShuffles ; ++i)
+	{
+		const int32 SwapIdx = FMath::RandRange(i, NumShuffles);// NextPoseCandidates.RandRange(i, NumShuffles);
+		NextPoseCandidates.Swap(i, SwapIdx);
+	}
+
+	
+	for (const auto& Pose : NextPoseCandidates)
+	{
+		if (!Pose->IsBlocked())
+		{
+			return Pose;
+		}
+	}
+
+	return this;
 }
 
 void AAnimatronicPose::OnConstruction(const FTransform& Transform)

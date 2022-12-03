@@ -8,6 +8,7 @@
 #include "UObject/Object.h"
 #include "Command.generated.h"
 
+class UGameplayMessageSubsystem;
 /**
  * 
  */
@@ -20,10 +21,11 @@ public:
 	/**
 	 * @brief Initializes the command with the given computer.
 	 * @param Computer 
-	 * @param TerminalWidget 
+	 * @param TerminalWidget
+	 * @param GameplayMessageSubsystem 
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Command")
-	void InitializeCommand(ATerminalComputer* Computer, UUserWidget* TerminalWidget);
+	void InitializeCommand(ATerminalComputer* Computer, UUserWidget* TerminalWidget, UGameplayMessageSubsystem* GameplayMessageSubsystem);
 
 	/**
 	 * @brief Executes the command with the given arguments.
@@ -50,6 +52,9 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Command|References", meta = (AllowPrivateAccess = "true"))
 	UUserWidget* TerminalWidget;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Command|References", meta = (AllowPrivateAccess = "true"))
+	UGameplayMessageSubsystem* GameplayMessageSubsystem;
 
 	
 };
