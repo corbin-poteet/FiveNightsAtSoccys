@@ -24,6 +24,18 @@ void AAnimatronicAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if(AFiveNightsGameMode* FiveNightsGameMode = Cast<AFiveNightsGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		const FAnimatronicSettings Settings = FiveNightsGameMode->GetAnimatronicSettings(AnimatronicTag);
+		ActivateAnimatronic(Settings);
+	}
+	
+}
+
+void AAnimatronicAIController::ActivateAnimatronic(FAnimatronicSettings Settings)
+{
+	DifficultyLevel = Settings.StartingDifficulty;
+
 	AAnimatronicPose* StartingPose;
 	if(!FindStartingPose(StartingPose))
 	{
@@ -41,9 +53,10 @@ void AAnimatronicAIController::BeginPlay()
 	if (IsValid(BehaviorTree))
 	{
 		BlackboardComponent->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+		BlackboardComponent->SetValueAsFloat("WaitTime", WaitTime);
+		BlackboardComponent->SetValueAsInt("DifficultyLevel", DifficultyLevel);
 		BehaviorTreeComponent->StartTree(*BehaviorTree);
 	}
-	
 }
 
 bool AAnimatronicAIController::FindStartingPose(AAnimatronicPose*& OutStartingPose)

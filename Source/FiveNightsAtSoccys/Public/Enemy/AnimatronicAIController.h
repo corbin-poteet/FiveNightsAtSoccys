@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "AnimatronicPose.h"
 #include "GameplayTagContainer.h"
+#include "GameMode/FiveNightsGameMode.h"
 #include "AnimatronicAIController.generated.h"
 
 class UBehaviorTreeComponent;
@@ -35,11 +36,16 @@ public:
 	virtual void BeginPlay() override;
 	//~End of AActor interface
 
+	void ActivateAnimatronic(FAnimatronicSettings Settings);
+
 	/**
 	 * @brief Move to the pose given by CurrentPose->SelectNextPose()
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
 	void Move();
+
+	UFUNCTION(BlueprintCallable, Category = "Animatronic", meta = (AllowPrivateAccess = "true"))
+	int32 GetDifficultyLevel() const { return DifficultyLevel; }
 
 protected:
 
@@ -65,6 +71,12 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
 	AAnimatronicPose* CurrentPose;
 
+	UPROPERTY(BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
+	int32 DifficultyLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	float WaitTime = 5.0f;
+	
 	UPROPERTY(BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBlackboardData* BlackboardData;
 

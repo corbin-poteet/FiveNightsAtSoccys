@@ -37,6 +37,10 @@ class FIVENIGHTSATSOCCYS_API AFiveNightsGameMode : public AGameModeBase
 {
 public:
 	AFiveNightsGameMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Config|Difficulty")
+	FAnimatronicSettings GetAnimatronicSettings(FGameplayTag AnimatronicTag);
+	
 private:
 	GENERATED_BODY()
 

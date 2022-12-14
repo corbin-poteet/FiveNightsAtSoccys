@@ -10,6 +10,11 @@ AFiveNightsGameMode::AFiveNightsGameMode()
 	//this->CustomTimeDilation = TimeDilation;
 }
 
+FAnimatronicSettings AFiveNightsGameMode::GetAnimatronicSettings(FGameplayTag AnimatronicTag)
+{
+	return *AnimatronicSettings.Find(AnimatronicTag);
+}
+
 void AFiveNightsGameMode::AddSecond()
 {
 	const FTimespan Second = FTimespan(0, 0, 1);
@@ -45,6 +50,8 @@ void AFiveNightsGameMode::BeginPlay()
 
 	// set timer to add a second to currenttime every second
 	GetWorldTimerManager().SetTimer(NightTimerHandle, this, &AFiveNightsGameMode::AddSecond, 1.0f / TimeDilation, true);
+
+	
 	
 }
 

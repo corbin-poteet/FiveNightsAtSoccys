@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Computer/TerminalComputer.h"
+#include "Computer/TerminalScreen.h"
 #include "UObject/Object.h"
 #include "Command.generated.h"
 
@@ -25,7 +26,7 @@ public:
 	 * @param GameplayMessageSubsystem 
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Command")
-	void InitializeCommand(ATerminalComputer* Computer, UUserWidget* TerminalWidget, UGameplayMessageSubsystem* GameplayMessageSubsystem);
+	void InitializeCommand(ATerminalComputer* Computer, UTerminalScreen* TerminalWidget, UGameplayMessageSubsystem* GameplayMessageSubsystem);
 
 	/**
 	 * @brief Executes the command with the given arguments.
@@ -33,6 +34,12 @@ public:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Command")
 	void Execute(const TArray<FString>& Args);
+
+	UFUNCTION(BlueprintCallable, Category = "Command")
+	void Return(bool bNewLine = true, bool bSuccess = false);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Command")
+	void ReceiveInput(const FString& Input);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Command")
 	FString GetCommandName() const { return CommandName; }
@@ -51,7 +58,7 @@ private:
 	ATerminalComputer* Computer;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Command|References", meta = (AllowPrivateAccess = "true"))
-	UUserWidget* TerminalWidget;
+	UTerminalScreen* TerminalWidget;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Command|References", meta = (AllowPrivateAccess = "true"))
 	UGameplayMessageSubsystem* GameplayMessageSubsystem;

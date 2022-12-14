@@ -3,10 +3,20 @@
 
 #include "Computer/Commands/Command.h"
 
-void UCommand::InitializeCommand(ATerminalComputer* InComputer, UUserWidget* InTerminalWidget, UGameplayMessageSubsystem* InGameplayMessageSubsystem)
+#include "Computer/TerminalScreen.h"
+
+void UCommand::InitializeCommand(ATerminalComputer* InComputer, UTerminalScreen* InTerminalWidget, UGameplayMessageSubsystem* InGameplayMessageSubsystem)
 {
 	// Set the computer and terminal widget
 	Computer = InComputer;
 	TerminalWidget = InTerminalWidget;
 	GameplayMessageSubsystem = InGameplayMessageSubsystem;
 }
+
+void UCommand::Return(bool bNewLine, bool bSuccess)
+{
+	TerminalWidget->Return(bNewLine, bSuccess);
+}
+
+
+

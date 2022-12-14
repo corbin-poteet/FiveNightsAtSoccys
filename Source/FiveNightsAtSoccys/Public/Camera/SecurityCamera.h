@@ -33,6 +33,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Camera")
 	TArray<FName>& GetVisibleLevelNames() { return VisibleLevelNames; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Camera")
+	FGameplayTag GetCameraTag() const { return CameraTag; }
 	
 protected:
 	// Called when the game starts or when spawned
@@ -60,5 +63,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Config", meta = (AllowPrivateAccess = "true"))
 	TArray<FName> VisibleLevelNames;
+
+	UPROPERTY(EditInstanceOnly, Category = "Config", meta = (AllowPrivateAccess = "true"))
+	FGameplayTag CameraTag;
 	
 };

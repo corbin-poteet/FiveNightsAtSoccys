@@ -5,15 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Camera/SecurityCamera.h"
-#include "GameFramework/Actor.h"
 #include "AnimatronicPose.generated.h"
 
 UCLASS()
 class FIVENIGHTSATSOCCYS_API AAnimatronicPose : public ATaggedActor
 {
-public:
-	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
-private:
 	GENERATED_BODY()
 
 	// The main skeletal mesh associated with this animatronic (optional sub-object).
@@ -30,6 +26,10 @@ public:
 	virtual void BeginPlay() override;
 	//~End of AActor interface
 
+	//~Begin ATaggedActor Interface
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+	//~End of ATaggedActor Interface
+	
 	/**
 	 * @brief Activates and deactivates the animatronic.
 	 * @param bNewActivated true if the animatronic should be activated.

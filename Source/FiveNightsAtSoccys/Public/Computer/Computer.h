@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "TaggedActor.h"
 #include "Camera/SecurityCamera.h"
-#include "GameFramework/Actor.h"
 #include "Computer.generated.h"
 
 // dynamic multiclass delegate
@@ -25,14 +24,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnCameraChangedSignature OnCameraChanged;
-
-protected:
+	
 	//~AActor interface
 	virtual void BeginPlay() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 	//~End of AActor interface
 
-public:
+	
 	/**
 	 * @brief Switches the monitor view to the camera at the given index.
 	 * @param Index the index of the camera to switch to
